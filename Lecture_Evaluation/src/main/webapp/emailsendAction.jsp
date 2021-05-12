@@ -16,6 +16,78 @@
 
 <%
 	UserDAO userDAO = new UserDAO();
+	String userID = null;
+	if(session.getAttribute("userID") != null) {
+		userID = (String) session.getAttribute("userID");
+	}
+	if(userID == null) {
+		PrintWriter script = response.getWriter();
+		script.println("<script>");
+		script.println("alert('로그인을 해주세요.');");
+		script.println("location.href = 'userLogin.jsp'");
+		script.println("</script>");
+		script.close();
+		return;
+	}
+	boolean emailChecked = userDAO.getUserEmailChecked(userID);
+	
+	if(emailChecked == true) {
+		PrintWriter script = response.getWriter();
+		script.println("<script>");
+		script.println("alert('이미 인증 된 회원입니다.');");
+		script.println("location.href = 'index.jsp'");
+		script.println("</script>");
+		script.close();		
+		return;
+	}
+	
+	// 사용자에게 보낼 메시지를 기입합니다.
+	String host = "http://localhost:8181/Lecture_Evaluation/";
+	String from = "quf8093@gmail.com";
+	String to = userDAO.getUserEmail(userID);
+	String subject = "강의평가를 위한 이메일 확인 메일입니다.";
+	String content = "다음 링크에 접속하여 이메일 확인을 진행하세요." +
+		"<a href='" + host + "emailCheckAction.jsp?code=" + new SHA256().getSHA256(to) + "'>이메일 인증하기</a>";
+	
+	// SMTP에 접속하기 위한 정보를 기입합니다.
+	Properties p = new Properties();
+	p.put("mail.smtp.user", from);
+	p.put("mail.smtp.host", "smtp.googlemail.com");
+	p.put("mail.smtp.port", "465");
+	p.put("mail.smtp.starttls.enable", "true");
+	p.put("mail.smtp.auth", "true");
+	p.put("mail.smtp.debug", "true");
+	p.put("mail.smtp.socketFactory.port", "465");
+	p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+	p.put("mail.smtp.socketFactory.fallback", "false");
+	
+	try{
+	    Authenticator auth = new Gmail();
+	    Session ses = Session.getInstance(p, auth);
+	    ses.setDebug(true);
+	    MimeMessage msg = new MimeMessage(ses); 
+	    msg.setSubject(subject);
+	    Address fromAddr = new InternetAddress(from);
+	    msg.setFrom(fromAddr);
+	    Address toAddr = new InternetAddress(to);
+	    msg.addRecipient(Message.RecipientType.TO, toAddr);
+	    msg.setContent(content, "text/html;charset=UTF-8");
+	    Transport.send(msg);
+	} catch(Exception e){
+	    e.printStackTrace();
+		PrintWriter script = response.getWriter();
+		script.println("<script>");
+		script.println("alert('오류가 발생했습니다..');");
+		script.println("history.back();");
+		script.println("</script>");
+		script.close();		
+	    return;
+	
+	}
+
+
+/*
+	UserDAO userDAO = new UserDAO();
 	String userID =null;
 	if(session.getAttribute("userID") != null){
 		userID = (String)session.getAttribute("userID");
@@ -43,28 +115,36 @@
 	}
 	
 	String host = "http://localhost:8181/Lecture_Evaluation/";
-	String from = "메일주소";
+	String from = "quf8093@gmail.com";
 	String to = userDAO.getUserEmail(userID);
 	String subject = "강의 평가를 위한 이메일 인증 입니다.";
 	String content = "다음 링크에 접속하여 이메일 인증을 진행 하세요."+"<a href='"+ host +"emailCheckedAction.jsp?code="+new SHA256().getSHA256(to) +"'>이메일 인증하기</a>";
 	
+	//String PW = "winchbukedkqevum";
+	
 	Properties p = new Properties();
 	p.put("mail.smtp.user", from);
-	p.put("mail.smtp.host", "smtp.googlemail.com");
-	p.put("mail.smtp.port", "467");
+	
+	//p.put("mail.smtp.password", PW);
+	
+	p.put("mail.smtp.host", "smtp.gmail.com");
+	p.put("mail.smtp.port", "587");
+	
+	p.put("mail.smtp.ssl.enable", "true");
+	
 	p.put("mail.smtp.starttls.enable", "true");
 	p.put("mail.smtp.auth", "true");
 	p.put("mail.smtp.debug", "true");
-	p.put("mail.smtp.socketFactory.port", "467");
+	p.put("mail.smtp.socketFactory.port", "587");
 	p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 	p.put("mail.smtp.socketFactory.fallback", "false");
-
+	// googlemail TLS 587, SSL 465 
 
 	//타임 아웃 오류
 	String MAIL_SMTP_CONNECTIONTIMEOUT ="mail.smtp.connectiontimeout";
 	String MAIL_SMTP_TIMEOUT = "mail.smtp.timeout";
 	String MAIL_SMTP_WRITETIMEOUT = "mail.smtp.writetimeout";
-	String MAIL_SOCKET_TIMEOUT = "60000";
+	String MAIL_SOCKET_TIMEOUT = "100000";
 	 
 	// Set a fixed timeout of 60s for all operations -
 	// the default timeout is "infinite"
@@ -99,7 +179,7 @@
 		return;
 	}
 	
-	
+*/	
 %>
 
 <!DOCTYPE html>

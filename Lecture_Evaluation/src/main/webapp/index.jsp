@@ -18,6 +18,9 @@
 <jsp:include page="./nav.jsp"></jsp:include>
 
 	<section class="container">
+
+	<% System.out.println("index.jsp 출력"); %>
+
 		<!-- 본문 -->
 		<form action="./index.jsp" method="get" class="form-inline mt-3">
 			<div class="row">

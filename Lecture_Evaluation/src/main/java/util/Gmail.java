@@ -5,8 +5,11 @@ import javax.mail.PasswordAuthentication;
 
 public class Gmail extends Authenticator {
 
+	@Override
 	protected PasswordAuthentication getPasswordAuthentication() {
-		return new PasswordAuthentication("메일 주소 ", "비밀번호");
+		return new PasswordAuthentication("quf8093@gmail.com", "비밀번호");
 	}
+	
+	//오버라이드 빼먹음.설마..;;
 	
 }

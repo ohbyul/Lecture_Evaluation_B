@@ -8,23 +8,8 @@
 <%
 
 	request.setCharacterEncoding("UTF-8");
-
 	String userID = null;
-	if(session.getAttribute("userID") !=null){
-		userID = (String) session.getAttribute("userID");
-	}
-	if(userID !=null){
-		PrintWriter script = response.getWriter();
-		script.println("<script>");
-		script.println("alert('로그인이 된 상태입니다.');");
-		script.println("location.href = 'index.jsp';");
-		script.println("</script>");
-		script.close();
-		return;
-	}
-	
 	String userPW =null;
-	String userEmail=null;
 	
 	if(request.getParameter("userID") != null){
 		userID= request.getParameter("userID");
@@ -32,11 +17,9 @@
 	if(request.getParameter("userPW") != null){
 		userPW= request.getParameter("userPW");
 	}
-	if(request.getParameter("userEmail") != null){
-		userEmail= request.getParameter("userEmail");
-	}
+
 	
-	if(userID == null || userPW ==null || userEmail == null){
+	if(userID == null || userPW ==null){
 		PrintWriter script = response.getWriter();
 		script.println("<script>");
 		script.println("alert('입력이 안 된 사항이 있습니다.');");
@@ -47,20 +30,36 @@
 	}
 	
 	UserDAO userDAO = new UserDAO();
-	int result = userDAO.join(new UserDTO(userID,userPW,userEmail,SHA256.getSHA256(userEmail),false));
-	if(result == -1){
+	int result = userDAO.Login(userID, userPW);
+	if(result == 1){
+		session.setAttribute("userID", userID);
 		PrintWriter script = response.getWriter();
 		script.println("<script>");
-		script.println("alert('이미 존재한느 아이디입니다.');");
+		script.println("location.href = 'index.jsp';");
+		script.println("</script>");
+		script.close();
+		return;
+	}else if(result == 0){
+		PrintWriter script = response.getWriter();
+		script.println("<script>");
+		script.println("alert('비밀번호가 틀렸습니다.');");
 		script.println("history.back();");
 		script.println("</script>");
 		script.close();
 		return;
-	}else{
-		session.setAttribute("userID", userID);
+	}else if(result == -1){
 		PrintWriter script = response.getWriter();
 		script.println("<script>");
-		script.println("location.href = 'emailSendAction.jsp';");
+		script.println("alert('존재 하지 않는 아이디 입니다.');");
+		script.println("history.back();");
+		script.println("</script>");
+		script.close();
+		return;
+	}else if(result == -2){
+		PrintWriter script = response.getWriter();
+		script.println("<script>");
+		script.println("alert('데이터 베이스 오류가 발생하였습니다.');");
+		script.println("history.back();");
 		script.println("</script>");
 		script.close();
 		return;

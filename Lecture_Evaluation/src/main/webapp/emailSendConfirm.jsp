@@ -24,24 +24,24 @@
 </head>
 <body>
 
-
 <% 
 
 	String userID = null;
 	if(session.getAttribute("userID") !=null){
 		userID = (String) session.getAttribute("userID");
 	}
-	if(userID !=null){
+	if(userID ==null){
 		PrintWriter script = response.getWriter();
 		script.println("<script>");
-		script.println("alert('로그인이 된 상태입니다.');");
-		script.println("location.href = 'index.jsp';");
+		script.println("alert('로그인을 해주세요.');");
+		script.println("location.href = 'userLogin.jsp';");
 		script.println("</script>");
 		script.close();
 		return;
 	}
 	
 %>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <div class="container-fluid">
     <a class="navbar-brand" href="index.jsp"><h1>강의평가 웹 사이트</h1></a>
@@ -89,37 +89,13 @@
 
 
 	<!-- 본문 -->
-	
-	<% System.out.println("가입 페이지 출력"); %>
-	
-	
 	<section class="container mt-3" style="max-width: 560px;">
 
-		<form action="./userRegisterAction.jsp" method="post">
-			<div class="row mt-3">
-				<label>아이디</label> 
-				<input type="text" name="userID"
-					class="form-control">
-			</div>
-			<div class="row mt-3">
-				<label>이메일</label> 
-				<input type="email" name="userEmail"
-					class="form-control">
-			</div>
-			<div class="row mt-3">
-				<label>비밀번호</label> 
-				<input type="password" name="userPW"
-					class="form-control">
-			</div>
-			<div class="row mt-3">
-				<div class="col">
-					<button type="submit" class="btn btn-primary">회원가입</button>
-					<a href="./index.jsp" class="btn btn-primary">취소</a>
-				</div>
-
-			</div>
-		</form>
-
+		<div class="alert alert-warning mt-4" role="alert">
+			이메일 주소 인증을 하셔야 이용 가능합니다. 인증 메일을 받지 못하셨나요?		
+		</div>
+		<a href="emailSendAction.jsp" class="btn btn-primary">인증 메일 다시 받기</a>
+	
 	</section>
 
 
@@ -130,6 +106,7 @@
 
 
 <jsp:include page="./footer.jsp"></jsp:include>
+
 	<!-- 제이쿼리 자바 스크립트 추가하기 -->
 	<script src="./js/jquery.min.js"></script>
 	<!-- popper 자바 스크립트 추가하기 -->
