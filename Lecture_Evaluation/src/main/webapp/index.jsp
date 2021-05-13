@@ -1,3 +1,5 @@
+<%@page import="javax.net.ssl.SSLContext"%>
+<%@page import="java.util.Arrays"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -19,7 +21,10 @@
 
 	<section class="container">
 
-	<% System.out.println("index.jsp 출력"); %>
+	<% System.out.println("index.jsp 출력");
+	System.out.println(Arrays.toString(SSLContext.getDefault().getSupportedSSLParameters().getProtocols()));
+	//Java 가상 머신(JVM)에서 지원되는 TLS 버전을 확인
+	%>
 
 		<!-- 본문 -->
 		<form action="./index.jsp" method="get" class="form-inline mt-3">

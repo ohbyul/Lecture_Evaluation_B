@@ -94,7 +94,7 @@
 		<div class="alert alert-warning mt-4" role="alert">
 			이메일 주소 인증을 하셔야 이용 가능합니다. 인증 메일을 받지 못하셨나요?		
 		</div>
-		<a href="emailSendAction.jsp" class="btn btn-primary">인증 메일 다시 받기</a>
+		<a href="emailsendAction.jsp" class="btn btn-primary">인증 메일 다시 받기</a>
 	
 	</section>
 

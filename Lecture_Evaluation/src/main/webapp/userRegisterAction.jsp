@@ -60,7 +60,7 @@
 		session.setAttribute("userID", userID);
 		PrintWriter script = response.getWriter();
 		script.println("<script>");
-		script.println("location.href = 'emailSendAction.jsp';");
+		script.println("location.href = 'emailsendAction.jsp';");
 		script.println("</script>");
 		script.close();
 		return;

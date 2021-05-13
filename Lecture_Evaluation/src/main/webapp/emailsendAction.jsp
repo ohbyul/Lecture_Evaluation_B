@@ -52,14 +52,17 @@
 	// SMTP에 접속하기 위한 정보를 기입합니다.
 	Properties p = new Properties();
 	p.put("mail.smtp.user", from);
-	p.put("mail.smtp.host", "smtp.googlemail.com");
-	p.put("mail.smtp.port", "465");
-	p.put("mail.smtp.starttls.enable", "true");
+	p.put("mail.smtp.host", "smtp.gmail.com");
+	p.put("mail.smtp.port", "587");
+	
+	//p.put("mail.smtp.starttls.enable", "true");
+	
 	p.put("mail.smtp.auth", "true");
 	p.put("mail.smtp.debug", "true");
-	p.put("mail.smtp.socketFactory.port", "465");
+	p.put("mail.smtp.socketFactory.port", "587");
 	p.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
 	p.put("mail.smtp.socketFactory.fallback", "false");
+	// googlemail TLS 587, SSL 465 
 	
 	try{
 	    Authenticator auth = new Gmail();
