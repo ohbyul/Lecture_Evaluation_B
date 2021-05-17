@@ -80,8 +80,9 @@
 	    e.printStackTrace();
 		PrintWriter script = response.getWriter();
 		script.println("<script>");
-		script.println("alert('오류가 발생했습니다..');");
-		script.println("history.back();");
+		script.println("alert('오류가 발생했습니다.. 이메일을 못보냈기 때문이죠.. 그래도 가입은 되요^^ 그렇게 설정 해놨으니까 ');");
+		//script.println("history.back();");
+		script.println("location.href = 'index.jsp';");
 		script.println("</script>");
 		script.close();		
 	    return;
