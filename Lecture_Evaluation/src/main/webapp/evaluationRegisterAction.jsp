@@ -107,5 +107,5 @@
 		script.close();
 		return;
 	}
-
+	////unlead? or dead code 사라짐 
 %>
